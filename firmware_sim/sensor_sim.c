@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <unistd.h>
 
 struct sensor
 {   
@@ -85,13 +86,15 @@ void emit_json(const struct sensor* s){
     if (s == NULL) {
         return;
     }
-    printf("{\"device_id\": %d, \"status\": \"%s\", \"valor\": %.2f, \"bateria\": %.2f, \"secuencia\": %d, \"tipo_sensor\": \"%s\"}\n",
+    printf("{\"device_id\": %d, \"status\": \"%s\", \"valor\": %.2f, \"bat\": %.2f, \"seq\": %d, \"tipo_sensor\": \"%s\", \"timestamp\": %ld}\n",
            s->device_id,
            status_str(s->status),
            s->valor,
            s->bateria,
            s->secuencia,
-           tipo_sensor_str(s->tipo_sensor));
+           tipo_sensor_str(s->tipo_sensor),
+           time(NULL));
+    fflush(stdout);
 }
 
 int main() {
@@ -119,6 +122,7 @@ int main() {
     for (int i = 0; i < 10; i++) {
         simulate_sensor_reading(&temp_sensor);
         simulate_sensor_reading(&humidity_sensor);
+        sleep(2);
         emit_json(&temp_sensor);
         emit_json(&humidity_sensor);
 

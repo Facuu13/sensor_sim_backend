@@ -1,7 +1,7 @@
 # Mini IoT — Sensor Firmware (C) + Backend Ingestor (Python) — 100% Simulado
 
 Este repositorio es un mini-proyecto para practicar **C** y **Python** con un enfoque realista de **IoT/Embedded**, pero **sin hardware**.  
-La idea es simular un “firmware” que genera lecturas de sensores y un “backend” que las ingiere, valida y almacena, como si fuera un sistema real en producción.
+La idea es simular un “firmware” que genera lecturas de sensores y un “backend” que las ingiere, valida y almacena, como si fuera un sistema real en producción.s
 
 ## Objetivo
 

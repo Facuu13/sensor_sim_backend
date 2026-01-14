@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 struct sensor
 {   
@@ -54,6 +55,45 @@ int simulate_sensor_reading(struct sensor *sensor) {
     return 0; // success
 }
 
+// Function to print sensor status
+const char* status_str(int status) {
+    switch (status) {
+        case 0:
+            return "OK";
+        case 1:
+            return "ERROR";
+        default:
+            return "UNKNOWN";
+    }
+}
+
+// Function to print sensor type
+const char* tipo_sensor_str(int tipo_sensor) {
+    switch (tipo_sensor) {
+        case 0:
+            return "Temperature";
+        case 1:
+            return "Humidity";
+        case 2:
+            return "Pressure";
+        default:
+            return "Unknown";
+    }
+}
+
+void emit_json(const struct sensor* s){
+    if (s == NULL) {
+        return;
+    }
+    printf("{\"device_id\": %d, \"status\": \"%s\", \"valor\": %.2f, \"bateria\": %.2f, \"secuencia\": %d, \"tipo_sensor\": \"%s\"}\n",
+           s->device_id,
+           status_str(s->status),
+           s->valor,
+           s->bateria,
+           s->secuencia,
+           tipo_sensor_str(s->tipo_sensor));
+}
+
 int main() {
     struct sensor temp_sensor;
     temp_sensor.tipo_sensor = 0; // temperature sensor
@@ -73,14 +113,15 @@ int main() {
     humidity_sensor.bateria = 100.0;
     humidity_sensor.secuencia = 0;
 
-    // Simulate readings
+    // Simulate readings y enviar JSON output cada 2 segundos
+    srand(time(NULL)); // seed for random number generation
+
     for (int i = 0; i < 10; i++) {
         simulate_sensor_reading(&temp_sensor);
         simulate_sensor_reading(&humidity_sensor);
+        emit_json(&temp_sensor);
+        emit_json(&humidity_sensor);
+
     }
-
-
-
-
     return 0;
 }
